@@ -1,10 +1,15 @@
 #' RatioInfo
 #' 
-#' Returns basic information about how to calculate fundamentals ratios.
+#' Returns basic information about how to calculate fundamentals ratios. This function is called by GetRatios.
 #' @param ratio.name (optional) A ratio name (e.g. Earnings per Share) If none is specified, entire list is returned
 #' @return A list containing basic information about each ratio.
 
 RatioInfo <- function(ratio.name=NULL){
+  
+  # Generate a list of ratio information. Each element of the list corresponds to a ratio. Each element of r
+  # contains a sub-list with two elements: (1) a character vector of fundamentals used to calculate the ratio in question;
+  # (2) a formula that specifies how to calculate that ratio from those fundamentals.
+  
   r <- list()
   r[[1]] <- list(fundamentals=c("Net Income","Total Revenue"),formula=function(x) x[,1]/x[,2])
   names(r)[[1]] <- "Net Margin"
@@ -28,6 +33,9 @@ RatioInfo <- function(ratio.name=NULL){
   names(r)[[10]] <- "Return on Capital Employed"
   r[[11]] <- list(fundamentals=c("Net Income","Total Equity"),formula=function(x) x[,1]/x[,2])
   names(r)[[11]] <- "Return on Equity"
+  
+  # If ratio.name is left unspecified, then return the entire list. Otherwise, return a subsetted list containing only the
+  # ratio specified by ratio.name
   
   if(is.null(ratio.name)){
     return(r)

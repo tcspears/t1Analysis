@@ -6,9 +6,14 @@
 
 StripFormatting <- function(x){
   out <- x
+  # Remove commas
   out <- gsub(",", "", out)
+  # Convert open parentheses '(' to negative signs '-'
   out <- gsub("\\(", "-", out)
+  # Drop closing parentheses ')'
   out <- gsub("\\)", "", out)
+  # Remove leading and trailing whitespace
   out <- gsub("^\\s+|\\s+$", "", out)
+  # Return x
   return(as.numeric(out))
 }

@@ -1,6 +1,6 @@
 #' GetFundamentals
 #' 
-#' Extracts a set of fundamentals for a given firm
+#' Extracts a set of fundamentals for a given firm across a number of reporting periods.
 #' @param firm.name Name of firm
 #' @param fundamentals.names A character vector of fundamentals
 #' @param sheets A list of T1 sheets

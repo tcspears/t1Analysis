@@ -5,7 +5,10 @@
 #' @return A data.frame without redundant filings
 
 DropRedundantFilings <- function(df){
+  # Determine the location of columns that are duplicates
   columns.to.drop <- which(duplicated(attributes(df)$years))
+  
+  # Extract the column at which years begin to appear given the type of sheet.
   years.begin.column <- GetStructuralParameters(attributes(df)$type)$years.begin.column
   
   # Drops columns with redundant years
