@@ -1,6 +1,13 @@
 # t1Fundamentals
 R package to read in financial fundamentals from Thomson One Banker excel files.
 
+## Installing
+
+To install this package directly from github, use the install_github() function within the devtools package (available on CRAN):
+```
+install_github('neRtools','tcspears')
+```
+
 ## Examples
 Read in T1 excel files from a directory, and drop redundant filings from those files.
 ```
