@@ -13,6 +13,6 @@ RatioInfo(ratio.name = NULL)
 A list containing basic information about each ratio.
 }
 \description{
-Returns basic information about how to calculate fundamentals ratios.
+Returns basic information about how to calculate fundamentals ratios. This function is called by GetRatios.
 }
 

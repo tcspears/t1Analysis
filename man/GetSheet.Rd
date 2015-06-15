@@ -14,6 +14,6 @@ GetSheet(firm.name, sheet.type, sheets)
 \item{sheets}{List of sheets}
 }
 \description{
-Grabs a particular T1 sheet from a list of sheets that were previously read into memory
+Grabs a particular T1 sheet from a list of sheets that were previously read into memory.
 }
 
