@@ -2,12 +2,17 @@
 #' 
 #' Extracts a set of fundamentals for a given firm across a number of reporting periods.
 #' @param firm.name Name of firm
-#' @param fundamentals.names A character vector of fundamentals
 #' @param sheets A list of T1 sheets
+#' @param fundamentals.names (optional) A character vector of fundamentals
 #' @param years (optional) A character vector of years
 #' @return A matrix of fundamentals (one per column)
 #' 
-GetFundamentals <- function(firm.name,fundamentals.names,sheets,years=NULL){
+GetFundamentals <- function(firm.name,sheets,fundamentals.names=NULL,years=NULL){
+  
+  # If fundamentals.names is left unspecified, then return information on all fundamentals.
+  if(is.null(fundamentals.names)){
+    fundamentals.names <- FundamentalsInfo()[,1]
+  }
   
   # Extract name/location information on chosen fundamentals, as well as the corresponding sheets.
   info <- lapply(fundamentals.names,FUN=FundamentalsInfo)
