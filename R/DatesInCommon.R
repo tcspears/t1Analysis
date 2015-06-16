@@ -17,7 +17,7 @@ DatesInCommon <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
   sheet <- lapply(info,FUN=function(x) GetSheet(firm.name,x[1],sheets))
   
   # Determine the reporting periods in common between the fundamentals listed in fundamentals.names
-  dates.in.common <- Reduce(f=intersect,lapply(sheet,function(x) attributes(x)$reporting.dates))
+  dates.in.common <- as.Date(Reduce(f=intersect,lapply(sheet,function(x) attributes(x)$reporting.dates)),origin="1970-01-01")
   
   # If years is left un-specified, then check years in common for all available years. Otherwise, check only for
   # the years specified in the years variable.
@@ -26,10 +26,10 @@ DatesInCommon <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
     if(length(dates.in.common)==0){
       stop("No reporting dates in common.")
     }
-    return(as.Date(dates.in.common))
+    return(dates.in.common)
   # If the user specified dates contain hyphens (and refer to particular dates)
   } else if(all(grepl("-",dates))) {
-    intersection <- as.Date(intersect(as.Date(dates.in.common),as.Date(dates)))
+    intersection <- as.Date(intersect(dates.in.common,as.Date(dates)),origin="1970-01-01")
     if(length(intersection)==0){
       stop("No reporting dates in common.")
     } else {

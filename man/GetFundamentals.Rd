@@ -4,16 +4,16 @@
 \alias{GetFundamentals}
 \title{GetFundamentals}
 \usage{
-GetFundamentals(firm.name, sheets, fundamentals.names = NULL, years = NULL)
+GetFundamentals(firm.name, fundamentals.codes, sheets, dates = NULL)
 }
 \arguments{
 \item{firm.name}{Name of firm}
 
 \item{sheets}{A list of T1 sheets}
 
-\item{fundamentals.names}{(optional) A character vector of fundamentals}
+\item{dates}{(optional) A character vector of reporting dates}
 
-\item{years}{(optional) A character vector of years}
+\item{fundamentals.names}{A character vector of fundamentals}
 }
 \value{
 A matrix of fundamentals (one per column)

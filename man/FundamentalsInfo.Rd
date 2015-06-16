@@ -4,15 +4,16 @@
 \alias{FundamentalsInfo}
 \title{FundamentalsInfo}
 \usage{
-FundamentalsInfo(fundamental.name = NULL)
+FundamentalsInfo(firm.name, fundamental.code, sheets)
 }
 \arguments{
-\item{fundamental.name}{(optional) A name of a fundamental (e.g. Net Income). If none is specified, entire fundamentals matrix is returned.}
-}
-\value{
-A matrix of information about one or more fundamentals.
+\item{firm.name}{Name of firm}
+
+\item{fundamental.code}{Four digit code for fundamental (e.g. 'NINC' for 'Net Income')}
+
+\item{A}{list of T1 excel sheets}
 }
 \description{
-Returns basic information about the location of various fundamentals within the T1 sheets
+Determines the sheet and row containing a fundamental for a particular firm, as well as its full name.
 }
 

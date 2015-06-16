@@ -4,7 +4,7 @@
 \alias{GetRatios}
 \title{GetRatio}
 \usage{
-GetRatios(firm.name, sheets, ratio.names = NULL, years = NULL)
+GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL)
 }
 \arguments{
 \item{firm.name}{Name of firm}
