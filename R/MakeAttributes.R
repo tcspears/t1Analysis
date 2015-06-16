@@ -24,16 +24,5 @@ MakeAttributes <- function(sheet.type,df){
   attributes(df)$years <- as.numeric(df[GetStructuralParameters(sheet.type)$first.row,
                                         GetStructuralParameters(sheet.type)$data.begins.column:dim(df)[2]])
   
-  # Determine if the sheet contains audit information, and set the audit attribute accordingly
-  
-  audit <- NULL
-  if(substr(df[14,1],1,7)=="Auditor"){
-    audit <- TRUE
-  } else {
-    audit <- FALSE
-  }
-  
-  attributes(df)$audit <- audit
-  
   return(attributes(df))
 }

@@ -15,7 +15,7 @@ GetRatios <- function(firm.name,sheets,ratio.names=NULL,dates=NULL){
   
   # Generate a list containing a matrix of fundamentals needed to calculate each ratio specified in ratio.names
   # (using information provided by RatioInfo())
-  fundamentals <- lapply(ratio.names,FUN= function(x) GetFundamentals(firm.name,sheets,RatioInfo(x)[[1]][[1]],dates))
+  fundamentals <- lapply(ratio.names,FUN= function(x) GetFundamentals(firm.name,RatioInfo(x)[[1]][[1]],sheets,dates))
   
   # Generate a matrix of ratios using fundamentals by applying the ratio functions produced by RatioInfo()
   out <- mapply(ratio.names,fundamentals,FUN=function(x,y) RatioInfo(x)[[1]][[2]](y))

@@ -11,27 +11,27 @@ RatioInfo <- function(ratio.name=NULL){
   # (2) a formula that specifies how to calculate that ratio from those fundamentals.
   
   r <- list()
-  r[[1]] <- list(fundamentals=c("Net Income","Total Revenue"),formula=function(x) x[,1]/x[,2])
+  r[[1]] <- list(fundamentals=FundCode(c("Net Income","Total Revenue")),formula=function(x) x[,1]/x[,2])
   names(r)[[1]] <- "Net Margin"
-  r[[2]] <- list(fundamentals=c("Net Income","Total Assets"),formula=function(x) x[,1]/x[,2])
+  r[[2]] <- list(fundamentals=FundCode(c("Net Income","Total Assets")),formula=function(x) x[,1]/x[,2])
   names(r)[[2]] <- "Return on Assets"
-  r[[3]] <- list(fundamentals=c("Total Revenue","Total Assets"),formula=function(x) x[,1]/x[,2])
+  r[[3]] <- list(fundamentals=FundCode(c("Total Revenue","Total Assets")),formula=function(x) x[,1]/x[,2])
   names(r)[[3]] <- "Sales to Total Assets"
-  r[[4]] <- list(fundamentals=c("Current Assets","Current Liabilities"),formula=function(x) x[,1]/x[,2])
+  r[[4]] <- list(fundamentals=FundCode(c("Current Assets","Current Liabilities")),formula=function(x) x[,1]/x[,2])
   names(r)[[4]] <- "Current Ratio"
-  r[[5]] <- list(fundamentals=c("Long Term Debt","Total Assets"),formula=function(x) x[,1]/x[,2])
+  r[[5]] <- list(fundamentals=FundCode(c("Long Term Debt","Total Assets")),formula=function(x) x[,1]/x[,2])
   names(r)[[5]] <- "Long Term Debt to Total Assets"
-  r[[6]] <- list(fundamentals=c("Total Debt","Total Equity"),formula=function(x) x[,1]/x[,2])
+  r[[6]] <- list(fundamentals=FundCode(c("Total Debt","Total Equity")),formula=function(x) x[,1]/x[,2])
   names(r)[[6]] <- "Leverage Ratio"
-  r[[7]] <- list(fundamentals=c("Cash Flow From Operations","Current Liabilities"),formula=function(x) x[,1]/x[,2])
+  r[[7]] <- list(fundamentals=FundCode(c("Cash Flow From Operations","Current Liabilities")),formula=function(x) x[,1]/x[,2])
   names(r)[[7]] <- "Operating Cash Flow Ratio"
-  r[[8]] <- list(fundamentals=c("Long Term Debt","Total Equity"),formula=function(x) x[,1]/x[,2])
+  r[[8]] <- list(fundamentals=FundCode(c("Long Term Debt","Total Equity")),formula=function(x) x[,1]/x[,2])
   names(r)[[8]] <- "Long Term Debt To Total Equity Ratio"
-  r[[9]] <- list(fundamentals=c("Net Income","Preferred Dividends","Average Outstanding Shares"),formula=function(x) (x[,1]-x[,2])/x[,3])
+  r[[9]] <- list(fundamentals=FundCode(c("Net Income","Preferred Dividends","Average Outstanding Shares")),formula=function(x) (x[,1]-x[,2])/x[,3])
   names(r)[[9]] <- "Earnings Per Share"
-  r[[10]] <- list(fundamentals=c("Operating Income","Total Assets","Current Liabilities"),formula=function(x) x[,1]/(x[,2]-x[,3]))
+  r[[10]] <- list(fundamentals=FundCode(c("Operating Income","Total Assets","Current Liabilities")),formula=function(x) x[,1]/(x[,2]-x[,3]))
   names(r)[[10]] <- "Return on Capital Employed"
-  r[[11]] <- list(fundamentals=c("Net Income","Total Equity"),formula=function(x) x[,1]/x[,2])
+  r[[11]] <- list(fundamentals=FundCode(c("Net Income","Total Equity")),formula=function(x) x[,1]/x[,2])
   names(r)[[11]] <- "Return on Equity"
   
   # If ratio.name is left unspecified, then return the entire list. Otherwise, return a subsetted list containing only the

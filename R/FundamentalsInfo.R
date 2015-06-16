@@ -1,44 +1,31 @@
 #' FundamentalsInfo
 #' 
-#' Returns basic information about the location of various fundamentals within the T1 sheets
-#' @param sheet A T1 excel sheet.
-#' @param fundamental.name (optional) A name of a fundamental (e.g. Net Income). If none is specified, entire fundamentals matrix is returned.
-#' @return A matrix of information about one or more fundamentals.
+#' Determines the sheet and row containing a fundamental for a particular firm, as well as its full name.
+#' @param firm.name Name of firm
+#' @param fundamental.code Four digit code for fundamental (e.g. 'NINC' for 'Net Income')
+#' @param A list of T1 excel sheets
 
-FundamentalsInfo <- function(sheet=NULL,fundamental.name=NULL){
-  # Matrix of information about each fundamental
-  matrix <- structure(c("Current Assets", "Current Liabilities", "Net Income", 
-                        "Total Revenue", "Total Assets", "Long Term Debt", "Total Debt", 
-                        "Total Equity", "Cash Flow From Operations", "Preferred Dividends", 
-                        "Average Outstanding Shares", "Earnings Per Share", "Operating Income", 
-                        "ATCA", "LTCL", "NINC", "RTLR", "ATOT", "LTTD", "STLD", "QTLE", 
-                        "OTLO", "CPRD", "SBAS", "SBBF", "SOPI", "Balance Sheet", "Balance Sheet", 
-                        "Income Statement", "Income Statement", "Balance Sheet", "Balance Sheet", 
-                        "Balance Sheet", "Balance Sheet", "Cash Flow Statement", "Income Statement", 
-                        "Income Statement", "Income Statement", "Income Statement", "39", 
-                        "82", "90", "26", "67", "85", "86", "117", "45", "91", "99", 
-                        "100", "63"), .Dim = c(13L, 4L), .Dimnames = list(NULL, c("Fundamental", 
-                                                                                  "Code", "Sheet", "Location")))                                                                                
-  # If no sheet is provided, clip the location column
-  if(is.null(sheet)){
-    matrix <- matrix[,1:3]
-  } else if (!attributes(sheet)$audit){
-    # If audit flag for sheet is set to false, then adjust the fundamentals locations accordingly.
-    matrix[,4] <- as.character(as.numeric(matrix[,4])-3)
+FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
+  # Extract a sub-list of sheets matching to firm.name
+  firm.sheets.con <- sapply(sheets,FUN=function(x) attributes(x)$firm == firm.name)
+  firm.sheets <- sheets[firm.sheets.con]
+  
+  # Name the sheets based on their type
+  names(firm.sheets) <- sapply(firm.sheets,FUN=function(x) attributes(x)$type)
+  
+  # Determine which sheet contains the desired fundamental.
+  matching.location <- sapply(firm.sheets,FUN=function(x) which(x[,1]==fundamental.code))
+  
+  # Throw an error if there are no matching sheets/locations
+  if(length(unlist(matching.location))==0){
+    stop("No such fundamental exists within the sheets")
   }
-
-  # If fundamental.name is left unspecified, return the entire matrix.
-  if(is.null(fundamental.name)){
-    out <- matrix
-    return(out)
-  # If fundamental.name consists of a four letter T1 code, match this to the 2nd column of the matrix and return the 
-  # resulting sub-matrix.  
-  } else if(nchar(fundamental.name)==4) {
-    out <- matrix[matrix[,2]==fundamental.name,]
-    return(out)
-  # Otherwise, match fundamental.name to the 1st column of the matrix and return the resulting sub-matrix.
-  } else {
-    out <- matrix[matrix[,1]==fundamental.name,]
-    return(out)
-  }
+  
+  # Determine the location of the fundamental within the sheet and its full name.
+  which.sheet <- which(matching.location!=0)
+  which.row <- matching.location[[which(matching.location!=0)]]
+  full.name <- firm.sheets[[which.sheet]][which.row,2]
+  
+  # Return the sheet, location, and full name.
+  return(c(names(which.sheet),which.row,full.name))
 }
