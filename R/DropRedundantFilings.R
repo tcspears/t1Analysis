@@ -6,17 +6,22 @@
 
 DropRedundantFilings <- function(df){
   # Determine the location of columns that are duplicates
-  columns.to.drop <- which(duplicated(attributes(df)$years))
+  columns.to.drop <- which(duplicated(attributes(df)$reporting.dates))
   
-  # Extract the column at which years begin to appear given the type of sheet.
-  years.begin.column <- GetStructuralParameters(attributes(df)$type)$years.begin.column
+  # Extract the column at which reporting periods begin to appear given the type of sheet.
+  data.begins.column <- GetStructuralParameters(attributes(df)$type)$data.begins.column
   
-  # Drops columns with redundant years
-  df.new <- df[,-(years.begin.column-1+columns.to.drop)]
-  
-  # Sets attributes of new data.frame.
-  attributes(df.new) <- MakeAttributes(sheet.type=attributes(df)$type,df.new)
-  
-  # Return new data.frame.
-  return(df.new)
+  # Drops columns with redundant reporting periods, if such redundancies exist.
+  if(length(columns.to.drop)>0){
+    df.new <- df[,-(data.begins.column-1+columns.to.drop)]
+    
+    # Sets attributes of new data.frame.
+    attributes(df.new) <- MakeAttributes(sheet.type=attributes(df)$type,df.new)
+    
+    # Return new data.frame.
+    return(df.new)
+  } else {
+    # If there are no redundant columns, then just return the original dataset. 
+    return(df)
+  }
 }

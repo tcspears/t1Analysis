@@ -12,16 +12,28 @@ MakeAttributes <- function(sheet.type,df){
   attributes(df)$firm <- df[GetStructuralParameters(sheet.type)$firm.name.location[1],
                             GetStructuralParameters(sheet.type)$firm.name.location[2]]
   
-  # Reporting periods, based on the sheet type and the number of columns in the data.frame
-  attributes(df)$years <- as.numeric(df[GetStructuralParameters(sheet.type)$first.row,
-                                        GetStructuralParameters(sheet.type)$years.begin.column:dim(df)[2]])
-  
-  # Column numbers corresponding to the reporting periods
-  attributes(df)$years.location <- seq(GetStructuralParameters(sheet.type)$years.begin.column,dim(df)[2])
-  
   # Period end dates (in Date format), based on the sheet.type. Read in only first 10 characters of period end dates
   # (i.e drop times)
-  attributes(df)$period.end.dates <- as.Date(substr(df[GetStructuralParameters(sheet.type)$period.end.date.row,
-                                                       GetStructuralParameters(sheet.type)$years.begin.column:dim(df)[2]],1,10))
+  attributes(df)$reporting.dates <- as.Date(substr(df[GetStructuralParameters(sheet.type)$period.end.date.row,
+                                                       GetStructuralParameters(sheet.type)$data.begins.column:dim(df)[2]],1,10))
+  
+  # Column numbers corresponding to the reporting periods
+  attributes(df)$reporting.dates.columns <- seq(GetStructuralParameters(sheet.type)$data.begins.column,dim(df)[2])
+  
+  # Years corresponding to period reporting dates
+  attributes(df)$years <- as.numeric(df[GetStructuralParameters(sheet.type)$first.row,
+                                        GetStructuralParameters(sheet.type)$data.begins.column:dim(df)[2]])
+  
+  # Determine if the sheet contains audit information, and set the audit attribute accordingly
+  
+  audit <- NULL
+  if(substr(df[14,1],1,7)=="Auditor"){
+    audit <- TRUE
+  } else {
+    audit <- FALSE
+  }
+  
+  attributes(df)$audit <- audit
+  
   return(attributes(df))
 }

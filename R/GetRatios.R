@@ -7,7 +7,7 @@
 #' @param years (optional) A character vector of years.
 #' @return A matrix of ratios (one per column)
 
-GetRatios <- function(firm.name,sheets,ratio.names=NULL,years=NULL){
+GetRatios <- function(firm.name,sheets,ratio.names=NULL,dates=NULL){
   # If ratio.names is left unspecified, then return information on all ratios.
   if(is.null(ratio.names)){
     ratio.names <- names(RatioInfo())
@@ -15,7 +15,7 @@ GetRatios <- function(firm.name,sheets,ratio.names=NULL,years=NULL){
   
   # Generate a list containing a matrix of fundamentals needed to calculate each ratio specified in ratio.names
   # (using information provided by RatioInfo())
-  fundamentals <- lapply(ratio.names,FUN= function(x) GetFundamentals(firm.name,sheets,RatioInfo(x)[[1]][[1]],years))
+  fundamentals <- lapply(ratio.names,FUN= function(x) GetFundamentals(firm.name,sheets,RatioInfo(x)[[1]][[1]],dates))
   
   # Generate a matrix of ratios using fundamentals by applying the ratio functions produced by RatioInfo()
   out <- mapply(ratio.names,fundamentals,FUN=function(x,y) RatioInfo(x)[[1]][[2]](y))

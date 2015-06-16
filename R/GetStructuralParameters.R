@@ -6,7 +6,7 @@
 GetStructuralParameters <- function(sheet.type){
   # At the moment, the only allowed file types are Balance Sheets, Cash Flow Statements, and Income Statements.
   if(sheet.type %in% c("Balance Sheet","Cash Flow Statement","Income Statement")){
-    return(list(first.row=4,years.begin.column=3,firm.name.location=c(2,1),period.end.date.row=5))
+    return(list(data.begins.column=3,firm.name.location=c(2,1),first.row=4,period.end.date.row=5))
   } else {
     stop("Unknown file type.")
   }

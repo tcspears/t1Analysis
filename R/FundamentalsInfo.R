@@ -1,10 +1,11 @@
 #' FundamentalsInfo
 #' 
 #' Returns basic information about the location of various fundamentals within the T1 sheets
+#' @param sheet A T1 excel sheet.
 #' @param fundamental.name (optional) A name of a fundamental (e.g. Net Income). If none is specified, entire fundamentals matrix is returned.
 #' @return A matrix of information about one or more fundamentals.
 
-FundamentalsInfo <- function(fundamental.name=NULL){
+FundamentalsInfo <- function(sheet=NULL,fundamental.name=NULL){
   # Matrix of information about each fundamental
   matrix <- structure(c("Current Assets", "Current Liabilities", "Net Income", 
                         "Total Revenue", "Total Assets", "Long Term Debt", "Total Debt", 
@@ -18,6 +19,14 @@ FundamentalsInfo <- function(fundamental.name=NULL){
                         "82", "90", "26", "67", "85", "86", "117", "45", "91", "99", 
                         "100", "63"), .Dim = c(13L, 4L), .Dimnames = list(NULL, c("Fundamental", 
                                                                                   "Code", "Sheet", "Location")))                                                                                
+  # If no sheet is provided, clip the location column
+  if(is.null(sheet)){
+    matrix <- matrix[,1:3]
+  } else if (!attributes(sheet)$audit){
+    # If audit flag for sheet is set to false, then adjust the fundamentals locations accordingly.
+    matrix[,4] <- as.character(as.numeric(matrix[,4])-3)
+  }
+
   # If fundamental.name is left unspecified, return the entire matrix.
   if(is.null(fundamental.name)){
     out <- matrix
