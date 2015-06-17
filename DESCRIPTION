@@ -1,8 +1,9 @@
 Package: t1Fundamentals
-Title: What the Package Does (one line, title case)
+Title: R package to read in financial fundamentals from Thomson One Banker excel files.
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", , "first.last@example.com", role = c("aut", "cre"))
+Authors@R: person("Taylor", "Spears", "tcs@tcspears.net", role = c("aut", "cre"))
 Description: What the package does (one paragraph)
 Depends: R (>= 3.1.2)
-License: What license is it under?
+License: MIT License
 LazyData: true
+Imports: quantmod, lubridate, XLConnect
