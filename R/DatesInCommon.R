@@ -1,20 +1,12 @@
 #' DatesInCommon
 #' 
-#' Finds the reporting periods in common between a vector of fundamentals. If years is specified, then the function will only check those years.
-#' @param firm.name Name of firm
-#' @param fundamentals.names A character vector of fundamentals
-#' @param sheets A list of T1 sheets
+#' Finds the reporting periods in common between a list of sheets. If years is specified, then the function will only check those years.
+#' @param sheet A list of T1 sheets
 #' @param dates (optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).
 #' @return A character vector of matching dates. 
 
-DatesInCommon <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
+DatesInCommon <- function(sheet,dates=NULL){
   require(lubridate)
-  
-  # Create a list containing fundamentals information for each element of fundamentals.names
-  info <- lapply(fundamentals.codes,FUN=function(x) FundamentalsInfo(firm.name,fundamental.code=x,sheets))
-  
-  # Create a list of sheets that are required to calculate each fundamental listed in fundamentals.names
-  sheet <- lapply(info,FUN=function(x) GetSheet(firm.name,x[1],sheets))
   
   # Determine the reporting periods in common between the fundamentals listed in fundamentals.names
   dates.in.common <- as.Date(Reduce(f=intersect,lapply(sheet,function(x) attributes(x)$reporting.dates)),origin="1970-01-01")
@@ -34,7 +26,7 @@ DatesInCommon <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
       stop("No reporting dates in common.")
     } else {
       # Grab the subset of dates.in.common that match the dates listed in dates.  
-      out <- as.Date(dates.in.common[as.character(as.Date(dates.in.common)) %in% dates])
+      out <- as.Date(dates.in.common[as.character(as.Date(dates.in.common)) %in% dates],origin="1970-01-01")
       return(out)
     }
   # If the user specified dates are neither null, nor do they contain any hyphens, then they will be evaluated as years.
@@ -44,7 +36,7 @@ DatesInCommon <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
       stop("No reporting dates in common")
     } else {
       # Grab the subset of dates.in.common that share the same year as the years listed in dates.
-      out <- as.Date(dates.in.common)[year(as.Date(dates.in.common)) %in% dates]
+      out <- as.Date(dates.in.common,origin="1970-01-01")[year(as.Date(dates.in.common,origin="1970-01-01")) %in% dates]
       return(out)
     }
   }

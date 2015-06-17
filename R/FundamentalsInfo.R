@@ -1,6 +1,6 @@
 #' FundamentalsInfo
 #' 
-#' Determines the sheet and row containing a fundamental for a particular firm, as well as its full name.
+#' Determines the location of data on a fundamental for a particular firm, as well as its full name.
 #' @param firm.name Name of firm
 #' @param fundamental.code Four digit code for fundamental (e.g. 'NINC' for 'Net Income')
 #' @param A list of T1 excel sheets
@@ -22,14 +22,21 @@ FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
   }
   
   # If there are multiple matching entries, then see if the name is the same.
-  if(length(unlist(matching.location)) > 1){
+  if(fundamental.code == "Common Stock"){
     matches <- mapply(firm.sheets,matching.location,FUN=function(x,y) x[y,2])
     matches <- unique(matches[!is.na(matches)])
     if(length(unlist(matches)) == 1){
-      return(c("Multiple","Multiple",matches))
+      out <- c("Stock Timeseries",GetStructuralParameters("Stock Timeseries")$data.row,matches)
+      attributes(out)$firm <- firm.name
+      return(out)
     } else {
       stop("Error: Multiple matching entries with different values")
     }
+  }
+  
+  # Throw an error if the funudamental.code is *not* Common Stock but there are multiple matches
+  if(length(unlist(matching.location)) > 1 & fundamental.code != "Common Stock"){
+    stop("Error: Multiple matching entries with different values")
   }
   
   # Determine the location of the fundamental within the sheet and its full name.
@@ -38,5 +45,7 @@ FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
   full.name <- firm.sheets[[which.sheet]][which.row,2]
   
   # Return the sheet, location, and full name.
-  return(c(names(which.sheet),which.row,full.name))
+  out <- c(names(which.sheet),which.row,full.name)
+  attributes(out)$firm <- firm.name
+  return(out)
 }

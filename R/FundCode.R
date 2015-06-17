@@ -6,12 +6,22 @@
 
 FundCode <- function(fundamental.names){
   matrix <- structure(c("Current Assets", "Current Liabilities", "Net Income", 
-              "Total Revenue", "Total Assets", "Long Term Debt", "Total Debt", 
-              "Total Equity", "Cash Flow From Operations", "Preferred Dividends", 
-              "Average Outstanding Shares", "Earnings Per Share", "Operating Income", 
-              "ATCA", "LTCL", "NINC", "RTLR", "ATOT", "LTTD", "STLD", "QTLE", 
-              "OTLO", "CPRD", "SBAS", "SBBF", "SOPI"), .Dim = c(13L, 2L), .Dimnames = list(
-                NULL, c("Fundamental", "Code")))
-  
-  return(sapply(fundamental.names,FUN=function(x) matrix[matrix[,1]==x,2]))
+                        "Total Revenue", "Total Assets", "Long Term Debt", "Total Debt", 
+                        "Total Equity", "Cash Flow From Operations", "Preferred Dividends", 
+                        "Average Outstanding Shares", "Earnings Per Share", "Operating Income", 
+                        "Stock Price", "Shares Outstanding", "ATCA", "LTCL", "NINC", 
+                        "RTLR", "ATOT", "LTTD", "STLD", "QTLE", "OTLO", "CPRD", "SBAS", 
+                        "SBBF", "SOPI", "Common Stock", "QTCO"), .Dim = c(15L, 2L), .Dimnames = list(
+                          NULL, c("Fundamental", "Code")))
+    
+  GetCode <- function(fundamental.name){
+    if(fundamental.name %in% matrix[,1]){
+      out <- matrix[matrix[,1]==fundamental.name,2]
+      return(out)
+    } else {
+      out <- fundamental.name
+      return(out)
+    }
+  }
+  return(sapply(fundamental.names,FUN=function(x) GetCode(x)))
 }

@@ -9,13 +9,15 @@
 #' @return A matrix of fundamentals (one per column)
 
 GetFundamentals <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
+  # Run fundamentals.codes through FundCode to change full names into abbreviations
+  fundamentals.codes <- FundCode(fundamentals.codes)
   
   # Extract name/location information on chosen fundamentals, as well as the corresponding sheets.
   info <- lapply(fundamentals.codes,FUN=function(x) FundamentalsInfo(firm.name,fundamental.code=x,sheets))
-  sheet <- lapply(info,FUN=function(x) GetSheet(firm.name,x[1],sheets))
+  sheet <- lapply(info,FUN=function(x) GetSheet(x,sheets))
   
   # Determine dates in common; reset dates to this value
-  dates <- DatesInCommon(firm.name,fundamentals.codes,sheets,dates)
+  dates <- DatesInCommon(sheet,dates)
   
   # Determine the dates.location for chosen years
   dates.location <- lapply(sheet,function(x) attributes(x)$reporting.dates.columns[which(attributes(x)$reporting.dates %in% dates)])

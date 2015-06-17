@@ -14,6 +14,6 @@ FundamentalsInfo(firm.name, fundamental.code, sheets)
 \item{A}{list of T1 excel sheets}
 }
 \description{
-Determines the sheet and row containing a fundamental for a particular firm, as well as its full name.
+Determines the location of data on a fundamental for a particular firm, as well as its full name.
 }
 

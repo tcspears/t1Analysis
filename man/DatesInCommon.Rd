@@ -4,21 +4,17 @@
 \alias{DatesInCommon}
 \title{DatesInCommon}
 \usage{
-DatesInCommon(firm.name, fundamentals.codes, sheets, dates = NULL)
+DatesInCommon(sheet, dates = NULL)
 }
 \arguments{
-\item{firm.name}{Name of firm}
-
-\item{sheets}{A list of T1 sheets}
+\item{sheet}{A list of T1 sheets}
 
 \item{dates}{(optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).}
-
-\item{fundamentals.names}{A character vector of fundamentals}
 }
 \value{
 A character vector of matching dates.
 }
 \description{
-Finds the reporting periods in common between a vector of fundamentals. If years is specified, then the function will only check those years.
+Finds the reporting periods in common between a list of sheets. If years is specified, then the function will only check those years.
 }
 

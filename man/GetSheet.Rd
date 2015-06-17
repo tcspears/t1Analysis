@@ -4,12 +4,10 @@
 \alias{GetSheet}
 \title{GetSheet}
 \usage{
-GetSheet(firm.name, sheet.type, sheets)
+GetSheet(fundamental.info, sheets)
 }
 \arguments{
-\item{firm.name}{Name of the firm}
-
-\item{sheet.type}{Type of sheet (e.g. Balance Sheet)}
+\item{fundamental.info}{A character vector of fundamental info, output from FundamentalsInfo.}
 
 \item{sheets}{List of sheets}
 }
