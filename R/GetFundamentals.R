@@ -5,7 +5,7 @@
 #' @param firm.name Name of firm
 #' @param fundamentals.names A character vector of fundamentals
 #' @param sheets A list of T1 sheets
-#' @param dates (optional) A character vector of reporting dates
+#' @param dates (optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).
 #' @return A matrix of fundamentals (one per column)
 
 GetFundamentals <- function(firm.name,fundamentals.codes,sheets,dates=NULL){

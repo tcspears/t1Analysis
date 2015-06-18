@@ -15,13 +15,18 @@ FundCode <- function(fundamental.names){
                           NULL, c("Fundamental", "Code")))
     
   GetCode <- function(fundamental.name){
+    # If the fundamental.name is in the matrix, then return the 4 digit coe.
     if(fundamental.name %in% matrix[,1]){
       out <- matrix[matrix[,1]==fundamental.name,2]
       return(out)
+      
+    # If it isn't, then just return the fundamental.name itself (as it might be a fundamental code not in the matrix)
     } else {
       out <- fundamental.name
       return(out)
     }
   }
+  
+  # Apply GetCode to all of the elements in fundamental.names
   return(sapply(fundamental.names,FUN=function(x) GetCode(x)))
 }
