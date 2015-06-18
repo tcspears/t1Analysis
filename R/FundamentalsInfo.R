@@ -4,6 +4,7 @@
 #' @param firm.name Name of firm
 #' @param fundamental.code Four digit code for fundamental (e.g. 'NINC' for 'Net Income')
 #' @param A list of T1 excel sheets
+#' @return A character vector consisting of information on the specified fundamental (e.g. location within sheets)
 
 FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
   # Extract a sub-list of sheets matching to firm.name
@@ -21,15 +22,23 @@ FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
     stop("No such fundamental exists within the sheets")
   }
   
-  # If there are multiple matching entries, then see if the name is the same.
+  # If the fundamental.code is of type Common Stock, then run this code instead.
+  # (We have to grab the stock prices sheet from Google (via the quantmod package) rather than from the list of T1 sheets.)
   if(fundamental.code == "Common Stock"){
+    
+    # Find the ticker symbol from the T1 excel sheets. Generally 'Common Stock' matches to both the ticker symbol 
+    # (in multiple locations)and NA values. This drops the NA values and multiple values.
     matches <- mapply(firm.sheets,matching.location,FUN=function(x,y) x[y,2])
     matches <- unique(matches[!is.na(matches)])
+    
+    # If there is a unique ticker symbol associated with Common Stock, then grab the data.row from GetStructuralParameters,
+    # combine it together with the sheet type and ticker symbol and return to the user.
     if(length(unlist(matches)) == 1){
       out <- c("Stock Timeseries",GetStructuralParameters("Stock Timeseries")$data.row,matches)
       attributes(out)$firm <- firm.name
       return(out)
     } else {
+    # Throw an error if there are multiple matching ticker symbols/entries.
       stop("Error: Multiple matching entries with different values")
     }
   }
