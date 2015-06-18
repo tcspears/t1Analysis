@@ -3,9 +3,9 @@ R package to read in financial fundamentals from Thomson One Banker excel files.
 
 ## Installing
 
-This package depends on the XLConnect package, which is available on CRAN.
+This package depends on the XLConnect, lubridate, xts, zoo, and quantmod packages. These are available on CRAN.
 
-To install this package directly from github, use the install_github() function within the devtools package (available on CRAN):
+To install this package (and its dependencies) directly from github, use the install_github() function within the devtools package (also available on CRAN):
 ```
 install_github('t1Fundamentals','tcspears')
 ```
