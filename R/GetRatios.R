@@ -1,4 +1,4 @@
-#' GetRatio
+#' GetRatios
 #' 
 #' Calculates a set of fundamental ratios for a given firm
 #' @param firm.name Name of firm
