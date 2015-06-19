@@ -11,7 +11,7 @@ GetFundamentals(firm.name, fundamentals.codes, sheets, dates = NULL)
 
 \item{sheets}{A list of T1 sheets}
 
-\item{dates}{(optional) A character vector of reporting dates}
+\item{dates}{(optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).}
 
 \item{fundamentals.names}{A character vector of fundamentals}
 }

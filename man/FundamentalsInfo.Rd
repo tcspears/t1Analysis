@@ -13,6 +13,9 @@ FundamentalsInfo(firm.name, fundamental.code, sheets)
 
 \item{A}{list of T1 excel sheets}
 }
+\value{
+A character vector consisting of information on the specified fundamental (e.g. location within sheets)
+}
 \description{
 Determines the location of data on a fundamental for a particular firm, as well as its full name.
 }

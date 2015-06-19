@@ -7,14 +7,13 @@
 #' @return A list of average stock prices
 
 GetStockPriceAverages <- function(symbol,start.date,forward.dates=c(5,10)){
-  require(quantmod)
   
   # If the format of start.date is not Date, transform it.
   if(class(start.date)!="Date"){
     start.date <- as.Date(start.date)
   }
   
-  prices <- lapply(forward.dates,FUN=function(x) getSymbols(Symbols=symbol,
+  prices <- lapply(forward.dates,FUN=function(x) quantmod::getSymbols(Symbols=symbol,
                                                   from=start.date,
                                                   to=start.date+x,
                                                   src="google",

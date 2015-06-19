@@ -6,7 +6,6 @@
 #' @return A character vector of matching dates. 
 
 DatesInCommon <- function(sheet,dates=NULL){
-  require(lubridate)
   
   # Determine the reporting periods in common between the fundamentals listed in fundamentals.names
   dates.in.common <- as.Date(Reduce(f=intersect,lapply(sheet,function(x) attributes(x)$reporting.dates)),origin="1970-01-01")
@@ -31,12 +30,12 @@ DatesInCommon <- function(sheet,dates=NULL){
     }
   # If the user specified dates are neither null, nor do they contain any hyphens, then they will be evaluated as years.
   } else {
-    intersection <- intersect(year(as.Date(dates.in.common)),dates)
+    intersection <- intersect(lubridate::year(as.Date(dates.in.common)),dates)
     if(length(intersection)==0){
       stop("No reporting dates in common")
     } else {
       # Grab the subset of dates.in.common that share the same year as the years listed in dates.
-      out <- as.Date(dates.in.common,origin="1970-01-01")[year(as.Date(dates.in.common,origin="1970-01-01")) %in% dates]
+      out <- as.Date(dates.in.common,origin="1970-01-01")[lubridate::year(as.Date(dates.in.common,origin="1970-01-01")) %in% dates]
       return(out)
     }
   }

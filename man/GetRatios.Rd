@@ -13,7 +13,7 @@ GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL)
 
 \item{ratio.names}{(optional) A character vector of ratio names. If none is specified, all available ratios are returned.}
 
-\item{years}{(optional) A character vector of years.}
+\item{dates}{(optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).}
 }
 \value{
 A matrix of ratios (one per column)
