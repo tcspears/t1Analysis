@@ -5,7 +5,7 @@
 #' @param sheet.types A character vector of sheet types to look for.
 #' @return A data.frame containing the contents of the .xlsx file.
 
-ReadT1Excel <- function(file.name){
+ReadT1File <- function(file.name){
   # Read raw HTML
   file <- readLines(file.name)
   
@@ -19,11 +19,16 @@ ReadT1Excel <- function(file.name){
   # Note: this will have to be modified once we start reading in combined files.
   data.location <- which.max(sapply(initial.read,length))
   
-  # Only keep rows that start with 4 capital letters (i.e. a fundamentals code)
+  # Only keep rows that start with 4 or 5 capital letters and numbers (i.e. a fundamentals code)
+  to.keep <- lapply(initial.read,FUN=function(x)  grepl("[A-Z0-9]{4,5}|Common Stock",x[,1]))
+  modified <- mapply(initial.read,to.keep,FUN=function(x,y) x[y,])
   
-  to.keep <- grepl("[A-Z]{4}",initial.read[[data.location]][,1])
-  out <- initial.read[[data.location]][to.keep,]
+  # Drop empty list.items
+  modified1 <- modified[lapply(modified,length)>0]
   
+  # Collapse list items into a single data.frame
+  out <- plyr::rbind.fill(modified1)
+    
   # Set attributes
   attributes(out)$firm <- xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", xmlValue)[1]
   attributes(out)$sheet.type <- xpathSApply(pagetree, "//*/div[@class='mso_stitle']", xmlValue)[1]
