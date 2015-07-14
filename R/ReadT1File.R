@@ -5,38 +5,32 @@
 #' @param sheet.types A character vector of sheet types to look for.
 #' @return A data.frame containing the contents of the .xlsx file.
 
-ReadT1File <- function(file.name,sheet.types=c("Balance Sheet","Cash Flow Statement","Income Statement")) {
+ReadT1Excel <- function(file.name){
+  # Read raw HTML
+  file <- readLines(file.name)
   
-  # Load workbook 
-  xlsx.file <- XLConnect::loadWorkbook(file.name)
+  # Parse raw HTML
+  pagetree <- XML::htmlTreeParse(file, useInternalNodes = TRUE)
   
-  # Specifies that '--' and '-' should be treated as NA values.
-  XLConnect::setMissingValue(xlsx.file, value = c("--","-"))
+  # Read tables from pagetree
+  initial.read <- XML::readHTMLTable(pagetree,stringsAsFactors = FALSE)
   
-  # Check to see if workbook contains sheets of the type listed in sheet.types
-  contains.sheet <- XLConnect::existsSheet(xlsx.file,sheet.types)
+  # Determine which of the elements of initial.read contains the data.
+  # Note: this will have to be modified once we start reading in combined files.
+  data.location <- which.max(sapply(initial.read,length))
   
-  df <- data.frame
+  # Only keep rows that start with 4 capital letters (i.e. a fundamentals code)
   
-  # If there is only one worksheet in the workbook.
-  if(sum(contains.sheet,na.rm=TRUE)==1){
-    
-    # Set the sheet type (used to set attributes)
-    sheet.type <- names(contains.sheet)[contains.sheet]
-    
-    # Read the sheet into a data.frame
-    df <- XLConnect::readWorksheet(xlsx.file, sheet=sheet.type, header=FALSE)
-    
-    # Set sheet attributes
-    attributes(df) <- MakeAttributes(sheet.type,df)
-    
-    # Return data.frame containing the sheet.
-    return(df)
+  to.keep <- grepl("[A-Z]{4}",initial.read[[data.location]][,1])
+  out <- initial.read[[data.location]][to.keep,]
   
-  # Otherwise, there is more than one worksheet in the workbook, which is problematic.
-  } else {
-    
-    # Throw an error if the workbook contains more/less than one matching sheet.
-    stop("Improperly formatted workbook. Workbook must contain a single Balance Sheet, Cash Flow Statement or Income Statement")
-  }
+  # Set attributes
+  attributes(out)$firm <- xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", xmlValue)[1]
+  attributes(out)$sheet.type <- xpathSApply(pagetree, "//*/div[@class='mso_stitle']", xmlValue)[1]
+  attributes(out)$years <- xpathSApply(pagetree, "//*/td[@class='mso_ghr-c']", xmlValue)[-1]
+  attributes(out)$reporting.dates <- as.Date(as.character(initial.read[[data.location]][1,-c(1,length(initial.read[[data.location]][1,]))]),format="%d/%m/%Y")
+  attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$sheet.type)$data.begins.column,dim(out)[2])
+  
+  # Return the file 
+  return(out)
 }
