@@ -8,5 +8,5 @@ Description: R package to read in financial fundamentals from Thomson One Banker
 Depends: R (>= 3.1.2)
 License: MIT License
 LazyData: true
-Imports: quantmod, lubridate, XLConnect
+Imports: quantmod, lubridate, XML, plyr
 URL: https://github.com/tcspears/t1Fundamentals

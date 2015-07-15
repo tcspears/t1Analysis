@@ -1,8 +1,7 @@
 #' ReadT1File
 #' 
-#' Read a Thomson ONE excel output file (.xlsx format) into memory
-#' @param file.name Name of .xlsx file
-#' @param sheet.types A character vector of sheet types to look for.
+#' Read a Thomson ONE excel/HTML output file into memory
+#' @param file.name Name of T1 excel/HTML file
 #' @return A data.frame containing the contents of the .xlsx file.
 
 ReadT1File <- function(file.name){
@@ -15,26 +14,29 @@ ReadT1File <- function(file.name){
   # Read tables from pagetree
   initial.read <- XML::readHTMLTable(pagetree,stringsAsFactors = FALSE)
   
-  # Determine which of the elements of initial.read contains the data.
-  # Note: this will have to be modified once we start reading in combined files.
-  data.location <- which.max(sapply(initial.read,length))
-  
   # Only keep rows that start with 4 or 5 capital letters and numbers (i.e. a fundamentals code)
-  to.keep <- lapply(initial.read,FUN=function(x)  grepl("[A-Z0-9]{4,5}|Common Stock",x[,1]))
-  modified <- mapply(initial.read,to.keep,FUN=function(x,y) x[y,])
+  data.rows <- lapply(initial.read,FUN=function(x)  grepl("[A-Z0-9]{4,5}|Common Stock",x[,1]))
   
-  # Drop empty list.items
-  modified1 <- modified[lapply(modified,length)>0]
+  # Drop empty sheets and then combine them all together
+  modified <- initial.read[lapply(initial.read,length)>0]
+  combined <- plyr::rbind.fill(modified)
   
-  # Collapse list items into a single data.frame
-  out <- plyr::rbind.fill(modified1)
-    
+  # Set column names for combined sheet (to enable merging later) and re-organise the Update Date row
+  # (shift date entries to the right by one column and insert an empty description column)
+  colnames(combined) <- c("Fundamentals Code","Description",combined[1,-c(1,length(combined[1,]))])
+  combined[combined[,1]=="Update Date:",] <- c("Update Date:","",combined[combined[,1]=="Update Date:",2:(length(combined[1,])-1)])
+  
+  # Drop rows that don't contain fundamentals data
+  data.rows <- grepl("[A-Z0-9]{4,5}|Common Stock|Update Date:",combined[,1])
+  out <- combined[data.rows,]
+  rownames(out) <- NULL
+  
   # Set attributes
-  attributes(out)$firm <- xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", xmlValue)[1]
-  attributes(out)$sheet.type <- xpathSApply(pagetree, "//*/div[@class='mso_stitle']", xmlValue)[1]
-  attributes(out)$years <- xpathSApply(pagetree, "//*/td[@class='mso_ghr-c']", xmlValue)[-1]
-  attributes(out)$reporting.dates <- as.Date(as.character(initial.read[[data.location]][1,-c(1,length(initial.read[[data.location]][1,]))]),format="%d/%m/%Y")
-  attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$sheet.type)$data.begins.column,dim(out)[2])
+  attributes(out)$firm <- XML::xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", xmlValue)[1]
+  attributes(out)$type <- XML::xpathSApply(pagetree, "//*/div[@class='mso_stitle']", xmlValue)[1]
+  attributes(out)$reporting.dates <- as.Date(colnames(out)[-(1:2)],format="%d/%m/%Y")
+  attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$type)$data.begins.column,dim(out)[2])
+  attributes(out)$years <- lubridate::year(attributes(out)$reporting.dates)
   
   # Return the file 
   return(out)

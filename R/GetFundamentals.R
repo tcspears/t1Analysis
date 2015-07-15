@@ -16,14 +16,17 @@ GetFundamentals <- function(firm.name,fundamentals.codes,sheets,dates=NULL){
   info <- lapply(fundamentals.codes,FUN=function(x) FundamentalsInfo(firm.name,fundamental.code=x,sheets))
   sheet <- lapply(info,FUN=function(x) GetSheet(x,sheets))
   
+  # Drop redundant date entries from sheets.
+  sheet.nodups <- lapply(sheet,FUN=function(x) DropRedundantFilings(x))
+  
   # Determine dates in common; reset dates to this value
-  dates <- DatesInCommon(sheet,dates)
+  dates <- DatesInCommon(sheet.nodups,dates)
   
   # Determine the dates.location for chosen years
-  dates.location <- lapply(sheet,function(x) attributes(x)$reporting.dates.columns[which(attributes(x)$reporting.dates %in% dates)])
+  dates.location <- lapply(sheet.nodups,function(x) attributes(x)$reporting.dates.columns[which(attributes(x)$reporting.dates %in% dates)])
   
   # Extract the specified fundamentals
-  fundamentals <- mapply(sheet,info,dates.location,FUN=function(x,y,z) StripFormatting(x[as.numeric(y[2]),z]))
+  fundamentals <- mapply(sheet.nodups,info,dates.location,FUN=function(x,y,z) StripFormatting(x[as.numeric(y[2]),z]))
   
   # Set attributes for fundamentals. 
   rownames(fundamentals) <- as.character(dates)

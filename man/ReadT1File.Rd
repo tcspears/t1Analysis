@@ -4,18 +4,15 @@
 \alias{ReadT1File}
 \title{ReadT1File}
 \usage{
-ReadT1File(file.name, sheet.types = c("Balance Sheet", "Cash Flow Statement",
-  "Income Statement"))
+ReadT1File(file.name)
 }
 \arguments{
-\item{file.name}{Name of .xlsx file}
-
-\item{sheet.types}{A character vector of sheet types to look for.}
+\item{file.name}{Name of T1 excel/HTML file}
 }
 \value{
 A data.frame containing the contents of the .xlsx file.
 }
 \description{
-Read a Thomson ONE excel output file (.xlsx format) into memory
+Read a Thomson ONE excel/HTML output file into memory
 }
 

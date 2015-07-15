@@ -2,7 +2,7 @@
 % Please edit documentation in R/GetRatios.R
 \name{GetRatios}
 \alias{GetRatios}
-\title{GetRatio}
+\title{GetRatios}
 \usage{
 GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL)
 }

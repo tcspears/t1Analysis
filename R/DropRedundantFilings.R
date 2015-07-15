@@ -13,15 +13,21 @@ DropRedundantFilings <- function(df){
   
   # Drops columns with redundant reporting periods, if such redundancies exist.
   if(length(columns.to.drop)>0){
-    df.new <- df[,-(data.begins.column-1+columns.to.drop)]
+    out <- df[,-(data.begins.column-1+columns.to.drop)]
     
     # Sets attributes of new data.frame.
-    attributes(df.new) <- MakeAttributes(sheet.type=attributes(df)$type,df.new)
+    # Set attributes
+    attributes(out)$firm <- attributes(df)$firm
+    attributes(out)$type <- attributes(df)$type
+    attributes(out)$reporting.dates <- as.Date(colnames(out)[-(1:2)],format="%d/%m/%Y")
+    attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$type)$data.begins.column,dim(out)[2])
+    attributes(out)$years <- lubridate::year(attributes(out)$reporting.dates)  
     
     # Return new data.frame.
-    return(df.new)
+    return(out)
   } else {
     # If there are no redundant columns, then just return the original dataset. 
-    return(df)
+    out <- df
+    return(out)
   }
 }

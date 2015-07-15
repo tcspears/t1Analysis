@@ -8,10 +8,10 @@
 GetStockTimeseries <- function(symbol,from.date,to.date){
   
   # Grab prices, and transform resulting object into format compatible with other sheets.
-  out <- quantmod::getSymbols(Symbols=symbol,from=from.date,to=to.date,src="google",auto.assign=FALSE)
-  out <- as.data.frame(out)
-  out <- out[order(row.names(out),decreasing=TRUE),]
-  out <- t(out)
+  time.series <- quantmod::getSymbols(Symbols=symbol,from=from.date,to=to.date,src="yahoo",auto.assign=FALSE)
+  time.series.df <- as.data.frame(time.series)
+  time.series.sorted <- time.series.df[order(row.names(time.series.df),decreasing=TRUE),]
+  out <- t(time.series.sorted)
   
   # Set attributes of price sheet
   attributes(out) <- MakeAttributes("Stock Timeseries",out)
