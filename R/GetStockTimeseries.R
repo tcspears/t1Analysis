@@ -14,7 +14,10 @@ GetStockTimeseries <- function(symbol,from.date,to.date){
   out <- t(time.series.sorted)
   
   # Set attributes of price sheet
-  attributes(out) <- MakeAttributes("Stock Timeseries",out)
+  attributes(out)$type <- "Stock Timeseries"
+  attributes(out)$reporting.dates <- as.Date(colnames(out))
+  attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$type)$data.begins.column,dim(out)[2])
+  attributes(out)$years <- lubridate::year(attributes(out)$reporting.dates)
   
   # Return price sheet
   return(out)
