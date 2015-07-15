@@ -11,17 +11,16 @@ install_github('t1Fundamentals','tcspears')
 ```
 
 ## Examples
-Read in T1 excel files from a directory, and drop redundant filings from those files. Then print a list of firms contained in those files.
+Read in T1 excel files from a directory, and then print a list of firms contained in those files.
 ```
 > sheets <- ReadT1Directory("./T1files")
-> sheets <- lapply(sheets,FUN=DropRedundantFilings)
 > GetFirms(sheets)
 [1] "3I Infrastructure PLC"                 "AA PLC"                                "Aberdeen Asset Management PLC"        
 [4] "Acacia Mining PLC"                     "Alent PLC"                             "Allied Minds PLC"                     
 [7] "Aberforth Smaller Companies Trust PLC" "AVEVA Group PLC"                       "Barclays PLC"
 
 ```
-Extract fundamentals from a firm's balance sheet, income statement, and cash flow statement:
+Extract fundamentals from a firm's balance sheet, income statement, and cash flow statement. `GetFundamentals` will automatically drop redundant filings.
 ```
 > GetFundamentals(GetFirms(sheets)[3],sheets,fundamentals.codes=c("Net Income","Total Debt","Stock Price"))
            Net Income Total Debt    ADN
