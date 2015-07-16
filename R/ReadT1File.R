@@ -32,8 +32,8 @@ ReadT1File <- function(file.name){
   rownames(out) <- NULL
   
   # Set attributes
-  attributes(out)$firm <- XML::xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", xmlValue)[1]
-  attributes(out)$type <- XML::xpathSApply(pagetree, "//*/div[@class='mso_stitle']", xmlValue)[1]
+  attributes(out)$firm <- XML::xpathSApply(pagetree, "//*/table[@id='companyPageHeading']/tr/td", XML::xmlValue)[1]
+  attributes(out)$type <- XML::xpathSApply(pagetree, "//*/div[@class='mso_stitle']", XML::xmlValue)[1]
   attributes(out)$reporting.dates <- as.Date(colnames(out)[-(1:2)],format="%d/%m/%Y")
   attributes(out)$reporting.dates.columns <- seq(GetStructuralParameters(attributes(out)$type)$data.begins.column,dim(out)[2])
   attributes(out)$years <- lubridate::year(attributes(out)$reporting.dates)
