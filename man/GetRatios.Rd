@@ -4,7 +4,8 @@
 \alias{GetRatios}
 \title{GetRatios}
 \usage{
-GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL)
+GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL,
+  common.dates = FALSE)
 }
 \arguments{
 \item{firm.name}{Name of firm}
@@ -14,6 +15,8 @@ GetRatios(firm.name, sheets, ratio.names = NULL, dates = NULL)
 \item{ratio.names}{(optional) A character vector of ratio names. If none is specified, all available ratios are returned.}
 
 \item{dates}{(optional) A character vector of reporting dates. These can either be years (e.g. '2014') or specific dates (e.g. '2014-05-12).}
+
+\item{common.dates}{(optional) A logical indicating whether ratios should only be calculated for dates that are common to all fundamentals, or for all possible dates. This is useful if you want the output to be a data.frame rather than a list.}
 }
 \value{
 A matrix of ratios (one per column)
