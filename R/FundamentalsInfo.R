@@ -31,6 +31,9 @@ FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
     matches <- mapply(firm.sheets,matching.location,FUN=function(x,y) x[y,2])
     matches <- unique(matches[!is.na(matches)])
     
+    # Drop ticker symbols that contain spaces, non-letters/non-numbers
+    matches <- matches[grepl("^\\S*$",matches)&grepl("^[A-Z0-9]{1,5}",matches)]
+    
     # If there is a unique ticker symbol associated with Common Stock, then grab the data.row from GetStructuralParameters,
     # combine it together with the sheet type and ticker symbol and return to the user.
     if(length(unlist(matches)) == 1){
@@ -39,7 +42,7 @@ FundamentalsInfo <- function(firm.name,fundamental.code,sheets){
       return(out)
     } else {
     # Throw an error if there are multiple matching ticker symbols/entries.
-      stop("Error: Multiple matching entries with different values")
+      stop("Error: Multiple matching ticker symbols")
     }
   }
   
